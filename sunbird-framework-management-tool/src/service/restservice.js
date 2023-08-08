@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = 'https://dev.knowlg.sunbird.org/api';
 
-const apiKey = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjdjVVcHZqYXlBREZKZXA0NHRXNVJEbFE2dDlWcW96bCJ9.MotxKvdOVFaeL_26NWUG-GV8ii13ZbPpORW4wffLFaQ";
+const apiKey = "API key";
  // Replace <API Key> with your actual API key
 
 export const fetchFrameworkList = () => {
