@@ -1,43 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import TermTable from './TermTable';
+import CustomTable from './CustomTable';
 import { fetchTermList } from '../service/restservice';
 
-function TermList() {
+const ErrorBoundary = ({ children }) => {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return <div>Something went wrong. Please try again later.</div>;
+  }
+
+  return children;
+};
+
+const TermList = () => {
   const [terms, setTerms] = useState([]);
   const [editId, setEditId] = useState(null);
+  const [error, setError] = useState(false); // Define an error state
 
   useEffect(() => {
-    // Fetch the list of terms from the API
-     fetchTermList()
-     .then(data=> {
-      console.log(data)
-
-      setTerms(data.result.Term)
-     })
-    }, []);
-  
+    fetchTermList()
+      .then(data => {
+        setTerms(data.result.Term);
+      })
+      .catch(error => {
+        console.error('Error fetching term list:', error);
+        setError(true); // Set the error state to trigger the error boundary
+      });
+  }, []);
 
   const handleEdit = (id) => {
     setEditId(id);
   };
 
   const handleDelete = (id) => {
-    // You can implement the delete logic here, such as making a DELETE request to the API
-    // After successful deletion, you can update the state to remove the deleted term
-    // For simplicity, let's just filter it out from the state.
     setTerms(prevTerms => prevTerms.filter(term => term.id !== id));
   };
 
+  const containerStyle = {
+    backgroundColor: 'white',
+    padding: '1rem',
+  };
+
   return (
-    <div>
-      <h2>Term List</h2>
-      <TermTable
-        terms={terms}
-        editId={editId}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+    <div style={containerStyle}>
+      <h2 style={{ color: '#3b5998' }}>Term List</h2>
+      <ErrorBoundary>
+        {error ? (
+          <div>Something went wrong. Please try again later.</div>
+        ) : (
+          <CustomTable
+            data={terms}
+            editId={editId}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        )}
+      </ErrorBoundary>
     </div>
   );
 }

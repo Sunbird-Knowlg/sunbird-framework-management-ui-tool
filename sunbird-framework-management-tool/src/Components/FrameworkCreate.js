@@ -1,12 +1,29 @@
 import React, { useState } from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
-import axios from 'axios';
-// import { useHistory } from 'react-router-dom';
+import { TextField, Button } from '@mui/material';
+import { CreateFramework } from '../service/restservice'; // Import the FrameworkCreate function
 
-function FrameworkCreate({ open, onClose, onCreate, title, placeholder, existingCodes }) {
+const formStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '90vh',
+};
+
+const formContainerStyle = {
+  width: '50%', // Set the width of the container to be half of the page
+  padding: '2rem',
+  backgroundColor: 'white',
+};
+// const appStyle = {
+//   height: '100vh', // Set the height to fill the entire viewport
+//   backgroundColor: '#f4f7fc', // Set the background color to #f4f7fc
+// };
+
+function FrameworkCreate() {
   const [name, setName] = useState('');
-  const [code, setCode] = useState('');
   const [nameError, setNameError] = useState('');
+  const [code, setCode] = useState('');
   const [codeError, setCodeError] = useState('');
 
   const handleNameChange = (e) => {
@@ -18,47 +35,47 @@ function FrameworkCreate({ open, onClose, onCreate, title, placeholder, existing
   const handleCodeChange = (e) => {
     const newCode = e.target.value;
     setCode(newCode);
-    setCodeError(existingCodes.includes(newCode) ? 'Code is already existed' : '');
+    setCodeError(newCode.trim() === '' ? 'Code is required' : '');
   };
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (name.trim() === '') {
       setNameError('Name is required');
       return;
     }
-    if (name.includes(' ')) {
-      setNameError('Spaces are not allowed');
-      return;
-    }
-    if (existingCodes.includes(code)) {
-      setCodeError('Code is already existed');
+
+    if (code.trim() === '') {
+      setCodeError('Code is required');
       return;
     }
 
-    axios.post('https://api.example.com/frameworks', {
-      name,
-      code,
-    })
-    .then(response => {
-      console.log('Framework created successfully:', response.data);
-      onCreate(name, code);
-      onClose();
-    })
-    .catch(error => {
-      console.log('Failed to create framework:', error);
-    });
+    // Perform the create action with the name and code
+    const response = await CreateFramework(name, code);
+    if (response) {
+      // The framework was successfully created
+      console.log('Framework created:', response);
+    }
+
+    // Reset the fields
+    setName('');
+    setCode('');
+  };
+
+  const handleCancel = () => {
+    // Reset the fields without saving the data
+    setName('');
+    setCode('');
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
+    <div style={formStyle}>
+      <div style={formContainerStyle}>
+        <h2  style={{ color: '#3b5998' }}>Create New Framework</h2>
         <TextField
           label="Name*"
           value={name}
           onChange={handleNameChange}
           fullWidth
-          placeholder={placeholder}
           error={nameError !== ''}
           helperText={nameError}
           style={{ marginBottom: '1rem' }}
@@ -68,17 +85,22 @@ function FrameworkCreate({ open, onClose, onCreate, title, placeholder, existing
           value={code}
           onChange={handleCodeChange}
           fullWidth
-          placeholder="Enter code"
           error={codeError !== ''}
           helperText={codeError}
           style={{ marginBottom: '1rem' }}
         />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleCreate} disabled={nameError !== '' || codeError !== ''}>Create</Button>
-      </DialogActions>
-    </Dialog>
+        <Button onClick={handleCreate} variant="contained" backgroundColor=" #3b5998" style={{ marginRight: '1rem' }}>
+          Create
+        </Button>
+        <Button onClick={handleCancel} variant="contained" backgroundColor=" #3b5998" >
+          Cancel
+        </Button>
+      </div>
+      {/* <div style={appStyle}>
+      <FrameworkCreate />
+    </div> */}
+    </div>
+    
   );
 }
 

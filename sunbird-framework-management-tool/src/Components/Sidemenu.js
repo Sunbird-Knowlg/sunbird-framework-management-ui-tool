@@ -1,72 +1,115 @@
 import React from 'react';
 import { Drawer, Accordion, AccordionSummary, AccordionDetails, Typography, Button } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Link } from 'react-router-dom';
-import { blue } from '@mui/material/colors';
 
-// Common button style for all framework, category, and term buttons
+const drawerWidth = 250; // Set your desired width here
+
 const buttonStyle = {
   marginBottom: '1rem',
   width: '100%',
-  anchor: "left",
-  backgroundColor:'#e1f5fe',
-  color:'black'
+  backgroundColor: '#3b5998',
+  color: 'white',
+  transition: 'background-color 0.3s',
+  textTransform: 'none',
+  fontSize: '17px',
+  fontFamily: 'gothvetica',
 };
 
-function SideMenu({ handleCreateClick, handleListClick, handleFormOpen }) {
+const accordionSummaryStyle = {
+  backgroundColor: '#3b5998',
+};
+
+const accordionDetailsStyle = {
+  backgroundColor: '#3b5998',
+};
+
+function SideMenu({ handleCreateClick, handleListClick }) {
   return (
-    // <Drawer anchor="left" open={true} variant="permanent" className="side-menu-drawer">
-    <Drawer anchor="left" open={true} variant="permanent" className="side-menu-drawer" sx={{ backgroundColor: '#e1f5fe' }}>
-      <div style={{ marginBottom: '1rem' }}>
+    <Drawer
+      anchor="left"
+      open={true}
+      variant="permanent"
+      PaperProps={{ style: { width: drawerWidth, backgroundColor: '#D8CFD0', border: '1px inset black' } }}
+    >
+      <div>
         <Accordion expanded={true} onChange={handleCreateClick}>
-          <AccordionSummary>
-            {/* expandIcon={<ExpandMoreIcon />} */}
-          
-            <Typography style={{ color: <strong>black</strong>}}>Create</Typography>
+          <AccordionSummary style={accordionSummaryStyle}>
+            <Typography style={{ color: 'white', fontFamily: 'gothvetica', fontSize: 26 }}>
+              <strong>Create</strong>
+            </Typography>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails style={accordionDetailsStyle}>
             <Link to="/framework/create">
-              <Button style={buttonStyle}>
-              Framework
+              <Button
+                style={{ ...buttonStyle }}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = '#004080')} // Hover effect
+                onMouseLeave={(e) => (e.target.style.backgroundColor = buttonStyle.backgroundColor)} // Remove hover effect
+              >
+                Framework
               </Button>
             </Link>
             <Link to="/category/create">
-              <Button style={buttonStyle}>
+              <Button
+                style={{ ...buttonStyle }}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = '#004080')} // Hover effect
+                onMouseLeave={(e) => (e.target.style.backgroundColor = buttonStyle.backgroundColor)} // Remove hover effect
+              >
                 Category
               </Button>
             </Link>
             <Link to="/term/create">
-              <Button style={buttonStyle}>
+              <Button
+                style={{ ...buttonStyle }}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = '#004080')} // Hover effect
+                onMouseLeave={(e) => (e.target.style.backgroundColor = buttonStyle.backgroundColor)} // Remove hover effect
+              >
                 Terms
               </Button>
             </Link>
           </AccordionDetails>
         </Accordion>
       </div>
-      <div style={{ marginBottom: '1rem' }}>
+      <div>
         <Accordion expanded={true} onChange={handleListClick}>
-          <AccordionSummary>
-          {/* expandIcon={<ExpandMoreIcon />}> */}
-           
-            <Typography style={{ color: <strong>black</strong>}}>List</Typography> 
+          <AccordionSummary style={accordionSummaryStyle}>
+            <Typography style={{ color: 'white', fontFamily: 'gothvetica', fontSize: 26 }}>
+              <strong>List</strong>
+            </Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <Button style={buttonStyle}>
-              <Link to="/framework/list" style={{ color: 'black' }}>Framework</Link>
+          <AccordionDetails style={accordionDetailsStyle}>
+            <Button
+              style={{ ...buttonStyle }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = '#004080')} // Hover effect
+              onMouseLeave={(e) => (e.target.style.backgroundColor = buttonStyle.backgroundColor)} // Remove hover effect
+            >
+              <Link to="/framework/list" style={{ color: ' white', textDecoration: 'none' }}>
+                Framework
+              </Link>
             </Button>
-            <Button style={buttonStyle}>
-              
-              <Link to="/category/list" style={{ color: 'black' }}>Category</Link>
+            <Button
+              style={{ ...buttonStyle }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = '#004080')} // Hover effect
+              onMouseLeave={(e) => (e.target.style.backgroundColor = buttonStyle.backgroundColor)} // Remove hover effect
+            >
+              <Link to="/category/list" style={{ color: 'white', textDecoration: 'none' }}>
+                Category
+              </Link>
             </Button>
-            <Button style={buttonStyle}>
-            <Link to="/term/list" style={{ color: 'black' }}>Terms</Link>
+            <Button
+              style={{ ...buttonStyle }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = '#004080')} // Hover effect
+              onMouseLeave={(e) => (e.target.style.backgroundColor = buttonStyle.backgroundColor)} // Remove hover effect
+            >
+              <Link to="/term/list" style={{ color: 'white', textDecoration: 'none' }}>
+                Terms
+              </Link>
             </Button>
           </AccordionDetails>
         </Accordion>
       </div>
+      <div style={{ backgroundColor: '#3b5998', height: '100%', border: 'none' }}></div>
     </Drawer>
   );
 }
 
 export default SideMenu;
-
