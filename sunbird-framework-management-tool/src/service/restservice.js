@@ -3,7 +3,7 @@ import axios from 'axios';
 const BASE_URL = 'https://dev.knowlg.sunbird.org/api';
 
 const apiKey = "API key";
- // Replace <API Key> with your actual API key
+// Replace <API Key> with your actual API key
 
 export const fetchFrameworkList = () => {
   const headers = {
@@ -71,116 +71,100 @@ export const fetchTermList = () => {
     });
 };
 
- 
-// const CREATE_BASE_URL = 'https://staging.open-sunbird.org/api';
-
-  export const CreateFramework = (name, code) => {
-    const headers = {
-      Authorization: apiKey,
-      'Content-Type': 'application/json',
-      'X-Channel-Id': 'c4gt-test', // Replace with your desired channel identifier
-    };
-  
-    const requestData = {
-      request: {
-        framework: {
-          name,
-          code,
-          channels: [
-            {
-              identifier: 'c4gt-test',
-            },
-          ],
-        },
-      },
-    };
-  
-    return axios.post(`${BASE_URL}/framework/v1/create`, requestData, { headers })
-      .then(response => response.data)
-      .catch(error => {
-        console.log('Failed to create framework:', error);
-        return null;
-      });
+export const CreateFramework = (name, code) => {
+  const headers = {
+    Authorization: apiKey,
+    'Content-Type': 'application/json',
+    'X-Channel-Id': 'c4gt-test', // Replace with your desired channel identifier
   };
 
-  
-  export const CreateCategory = (name, code) => {
-    const headers = {
-      Authorization: apiKey,
-      'Content-Type': 'application/json',
-      'X-Channel-Id': 'c4gt-test', // Replace with your desired channel identifier
-    };
-  
-    const requestData = {
-      request: {
-        category: {
-          name,
-          code,
-        },
+  const requestData = {
+    request: {
+      framework: {
+        name,
+        code,
+        channels: [
+          {
+            identifier: 'c4gt-test',
+          },
+        ],
       },
-    };
-  
-    return axios.post(`${BASE_URL}/framework/v1/category/create`, requestData, { headers })
-      .then(response => response.data)
-      .catch(error => {
-        console.log('Failed to create category:', error);
-        return null;
-      });
+    },
   };
-  
-  export const CreateTerm = (name, code) => {
-    const headers = {
-      Authorization: apiKey,
-      'Content-Type': 'application/json',
-      'X-Channel-Id': 'c4gt-test', // Replace with your desired channel identifier
-    };
-  
-    const requestData = {
-      request: {
-        term: {
-          code,
-          name,
-        },
-      },
-    };
-  
-    return axios.post(`${BASE_URL}/framework/v1/term/create`, requestData, { headers })
-      .then(response => response.data)
-      .catch(error => {
-        console.log('Failed to create term:', error);
-        return null;
-      });
-  };
-  
-  // restservice.js
+
+  return axios.post(`${BASE_URL}/framework/v1/create`, requestData, { headers })
+    .then(response => response.data)
+    .catch(error => {
+      console.log('Failed to create framework:', error);
+      return null;
+    });
+};
 
 
-  export const fetchFrameworkDetailsById = (identifier) => {
-    const headers = {
-      Authorization: apiKey,
-      'Content-Type': 'application/json',
-    };
-  
-    const requestData = {
-      request: {
-        search: {
-          identifier: identifier,
-        },
-      },
-    };
-  
-    return axios.post(`${BASE_URL}/framework/v1/list`, requestData, { headers })
-      .then(response => response.data.result.frameworks[0]) // Assuming the response contains the framework details as an array
-      .catch(error => {
-        console.log('Failed to fetch framework details:', error);
-        return {};
-      });
+export const CreateCategory = (name, code) => {
+  const headers = {
+    Authorization: apiKey,
+    'Content-Type': 'application/json',
+    'X-Channel-Id': 'c4gt-test', // Replace with your desired channel identifier
   };
-  
+
+  const requestData = {
+    request: {
+      category: {
+        name,
+        code,
+      },
+    },
+  };
+
+  return axios.post(`${BASE_URL}/framework/v1/category/create`, requestData, { headers })
+    .then(response => response.data)
+    .catch(error => {
+      console.log('Failed to create category:', error);
+      return null;
+    });
+};
+
+export const CreateTerm = (name, code) => {
+  const headers = {
+    Authorization: apiKey,
+    'Content-Type': 'application/json',
+    'X-Channel-Id': 'c4gt-test', // Replace with your desired channel identifier
+  };
+
+  const requestData = {
+    request: {
+      term: {
+        code,
+        name,
+      },
+    },
+  };
+
+  return axios.post(`${BASE_URL}/framework/v1/term/create`, requestData, { headers })
+    .then(response => response.data)
+    .catch(error => {
+      console.log('Failed to create term:', error);
+      return null;
+    });
+};
+
+// restservice.js
+
+
+export const fetchFrameworkDetailsById = (identifier) => {
+  const headers = {
+    Authorization: apiKey,
+    'Content-Type': 'application/json',
+  };
+
+  return axios.get(`${BASE_URL}/framework/v1/read/${identifier}`)
+      .then(response => response.data.result.framework) // Assuming the response contains the framework details as an array
+  .catch(error => {
+    console.log('Failed to fetch framework details:', error);
+    return {};
+  });
+  };
+
 // Other existing functions for fetching category, term, etc.
 // ...
-
-  
-  
-  
-

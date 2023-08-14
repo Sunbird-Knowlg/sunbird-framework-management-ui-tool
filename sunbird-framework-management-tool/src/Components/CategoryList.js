@@ -2,21 +2,28 @@ import React, { useState, useEffect } from 'react';
 import CustomTable from './CustomTable';
 import { fetchCategoryList } from '../service/restservice';
 
+const ErrorBoundary = ({ children }) => {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return <div>Something went wrong. Please try again later.</div>;
+  }
+
+  return children;
+};
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [editId, setEditId] = useState(null);
-  const [error, setError] = useState(null); // Add state for error
+  const [error, setError] = useState(false); // Add state for error
 
   useEffect(() => {
     fetchCategoryList()
       .then(data => {
         setCategories(data.result.Category);
-        setError(null); // Clear any previous error
-      })
+       })
       .catch(error => {
         console.error('Error fetching category list:', error);
-        setCategories([]); // Set categories to an empty array
-        setError('Error fetching category list'); // Set error message
+        setError(true); // Set error message
       });
   }, []);
 
@@ -36,8 +43,10 @@ const CategoryList = () => {
   return (
     <div style={containerStyle}>
       <h2 style={{ color: '#3b5998' }}>Category List</h2>
-      {error ? (
-        <p style={{ color: 'red' }}>{error}</p> // Display error message
+      <ErrorBoundary>
+        {error ? (
+          <div>Something went wrong. Please try again later.</div>
+      
       ) : (
         <CustomTable
           data={categories}
@@ -46,6 +55,7 @@ const CategoryList = () => {
           onDelete={handleDelete}
         />
       )}
+      </ErrorBoundary>
     </div>
   );
 }
