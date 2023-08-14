@@ -44,16 +44,18 @@ function CustomTable({ data, dataType, onEdit, onDelete }) {
       width: 150,
       flex: 1,
       align: 'left',
-      renderCell: (params) => (
-        <Link to={{
-          pathname: `/details`,
+      renderCell: (params) => {
+        console.log(params);
+        return (<Link to={{
+          pathname: `/details/${params.row.id}`,
           state: { rowData: params.row } // Pass the row data as state to the DetailsPage
         }} style={{ textDecoration: 'none' }}>
           <IconButton style={{ color: 'black', padding: '6px', fontSize: '14px' }}>
             <VisibilityIcon fontSize="small" />
           </IconButton>
-        </Link>
-      ),
+        </Link>);
+      }
+      ,
     },
   ];
 

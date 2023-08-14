@@ -18,7 +18,7 @@ const Routers = () => {
       <Route path='/framework/list' element={<FrameworkList />} />
       <Route path='/term/create' element={<TermCreate />} />
       <Route path='/term/list' element={<TermList />} />
-      <Route path='/details' element={<DetailsPage />} />
+      <Route path='/details/:id' element={<DetailsPage />} />
       {/* <Route path='/details/:id' element={<DetailsPage />} /> */}
       
 
