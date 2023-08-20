@@ -1,39 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import CustomTable from './CustomTable';
 import { fetchTermList } from '../service/restservice';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
 
-const ErrorBoundary = ({ children }) => {
-  const [hasError, setHasError] = useState(false);
-
-  if (hasError) {
-    return <div>Something went wrong. Please try again later.</div>;
-  }
-
-  return children;
+const ErrorBoundary = ({ children, onRetry }) => {
+  return (
+    <div>
+      {children}
+      <div style={{ marginTop: '1rem' }}>
+        <Button variant="contained" color="primary" onClick={onRetry}>
+          Retry
+        </Button>
+      </div>
+    </div>
+  );
 };
 
 const TermList = () => {
   const [terms, setTerms] = useState([]);
   const [editId, setEditId] = useState(null);
-  const [error, setError] = useState(false); // Define an error state
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
+  const fetchData = () => {
     fetchTermList()
       .then(data => {
         setTerms(data.result.Term);
+        setError(false);
       })
       .catch(error => {
         console.error('Error fetching term list:', error);
-        setError(true); // Set the error state to trigger the error boundary
+        setError(true);
       });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
-  const handleEdit = (id) => {
+  const handleEdit = id => {
     setEditId(id);
   };
 
-  const handleDelete = (id) => {
-    setTerms(prevTerms => prevTerms.filter(term => term.id !== id));
+  const handleDelete = id => {
+    setTerms(prevTerms =>
+      prevTerms.filter(term => term.id !== id)
+    );
   };
 
   const containerStyle = {
@@ -44,9 +56,11 @@ const TermList = () => {
   return (
     <div style={containerStyle}>
       <h2 style={{ color: '#3b5998' }}>Term List</h2>
-      <ErrorBoundary>
+      <ErrorBoundary onRetry={fetchData}>
         {error ? (
-          <div>Something went wrong. Please try again later.</div>
+          <Alert severity="error">
+            Something went wrong. Please try again later.
+          </Alert>
         ) : (
           <CustomTable
             data={terms}
@@ -58,6 +72,8 @@ const TermList = () => {
       </ErrorBoundary>
     </div>
   );
-}
+};
 
 export default TermList;
+
+
