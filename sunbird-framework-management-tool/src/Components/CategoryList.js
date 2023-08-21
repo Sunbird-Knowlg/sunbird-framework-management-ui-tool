@@ -3,16 +3,19 @@ import CustomTable from './CustomTable';
 import { fetchCategoryList } from '../service/restservice';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
+import styles from '../Styles/styles.module.css'; // Update the path based on your project structure
 
 const ErrorBoundary = ({ children, onRetry }) => {
   return (
     <div>
       {children}
-      <div style={{ marginTop: '1rem' }}>
-        <Button variant="contained" color="primary" onClick={onRetry}>
-          Retry
-        </Button>
-      </div>
+      {onRetry && ( // Render the Retry button only when onRetry is provided
+        <div className={styles.retryButtonContainer}>
+          <Button variant="contained" color="primary" onClick={onRetry}>
+            Retry
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
@@ -48,15 +51,10 @@ const CategoryList = () => {
     );
   };
 
-  const containerStyle = {
-    backgroundColor: 'white',
-    padding: '1rem',
-  };
-
   return (
-    <div style={containerStyle}>
-      <h2 style={{ color: '#3b5998' }}>Category List</h2>
-      <ErrorBoundary onRetry={fetchData}>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Category List</h2>
+      <ErrorBoundary onRetry={error ? fetchData : null}>
         {error ? (
           <Alert severity="error">
             Something went wrong. Please try again later.
@@ -75,7 +73,3 @@ const CategoryList = () => {
 };
 
 export default CategoryList;
-
-
-
-

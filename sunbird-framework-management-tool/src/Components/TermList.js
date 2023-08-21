@@ -3,16 +3,19 @@ import CustomTable from './CustomTable';
 import { fetchTermList } from '../service/restservice';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
+import styles from '../Styles/styles.module.css'; // Update the path based on your project structure
 
 const ErrorBoundary = ({ children, onRetry }) => {
   return (
     <div>
       {children}
-      <div style={{ marginTop: '1rem' }}>
-        <Button variant="contained" color="primary" onClick={onRetry}>
-          Retry
-        </Button>
-      </div>
+      {onRetry && ( // Render the Retry button only when onRetry is provided
+        <div className={styles.retryButtonContainer}>
+          <Button variant="contained" color="primary" onClick={onRetry}>
+            Retry
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
@@ -48,29 +51,26 @@ const TermList = () => {
     );
   };
 
-  const containerStyle = {
-    backgroundColor: 'white',
-    padding: '1rem',
-  };
+  
 
   return (
-    <div style={containerStyle}>
-      <h2 style={{ color: '#3b5998' }}>Term List</h2>
-      <ErrorBoundary onRetry={fetchData}>
-        {error ? (
-          <Alert severity="error">
-            Something went wrong. Please try again later.
-          </Alert>
-        ) : (
-          <CustomTable
-            data={terms}
-            editId={editId}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        )}
-      </ErrorBoundary>
-    </div>
+    <div className={styles.container}>
+    <h2 className={styles.title}>term List</h2>
+    <ErrorBoundary onRetry={error ? fetchData : null}>
+      {error ? (
+        <Alert severity="error">
+          Something went wrong. Please try again later.
+        </Alert>
+      ) : (
+        <CustomTable
+          data={terms}
+          editId={editId}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      )}
+    </ErrorBoundary>
+  </div>
   );
 };
 

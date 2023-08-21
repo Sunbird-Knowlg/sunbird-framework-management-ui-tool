@@ -1,0 +1,15 @@
+/* styles.css */
+
+.container {
+    background-color: white;
+    padding: 1rem;
+  }
+  
+  .title {
+    color: #3b5998;
+  }
+  
+  .retry-button-container {
+    margin-top: 1rem;
+  }
+  

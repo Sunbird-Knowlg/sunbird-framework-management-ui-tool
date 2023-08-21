@@ -8,70 +8,82 @@ const formStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   height: '90vh',
-  // backgroundColor: '#deeaee',
 };
 
 const formContainerStyle = {
-  width: '50%', // Set the width of the container to be half of the page
+  width: '50%',
   padding: '2rem',
   backgroundColor: 'white',
-  // height:'70%',
 };
 
 function CategoryCreate({ existingCodes }) {
   const [name, setName] = useState('');
-  const [nameError, setNameError] = useState('');
   const [code, setCode] = useState('');
+
+  const validateName = (newName) => {
+    if (newName.trim() === '') {
+      return 'Name is required';
+    } else if (newName.includes(' ')) {
+      return 'Spaces are not allowed';
+    }
+    return '';
+  };
+
+  const validateCode = (newCode) => {
+    if (newCode.trim() === '') {
+      return 'Code is required';
+    }
+    if (existingCodes && existingCodes.includes(newCode.trim())) {
+      return 'Code already exists';
+    }
+    return '';
+  };
+  
+
+  const [nameError, setNameError] = useState('');
   const [codeError, setCodeError] = useState('');
-  const [codeExistsError, setCodeExistsError] = useState('');
 
   const handleNameChange = (e) => {
     const newName = e.target.value;
     setName(newName);
-    setNameError(newName.trim() === '' ? 'Name is required' : newName.includes(' ') ? 'Spaces are not allowed' : '');
+    setNameError(validateName(newName));
   };
 
   const handleCodeChange = (e) => {
     const newCode = e.target.value;
     setCode(newCode);
-    setCodeError(newCode.trim() === '' ? 'Code is required' : '');
-    // setCodeExistsError(existingCodes.includes(newCode.trim()) ? 'Code already exists' : '');
+    setCodeError(validateCode(newCode));
   };
 
   const handleCreate = async () => {
-    if (name.trim() === '') {
-      setNameError('Name is required');
-      return;
+    const newNameError = validateName(name);
+    const newCodeError = validateCode(code);
+
+    if (!newNameError && !newCodeError) {
+      const response = await CreateCategory(name, code);
+      if (response) {
+        // Handle success response
+      } else {
+        // Handle error response
+      }
+
+      // Reset fields
+      setName('');
+      setCode('');
+      setNameError('');
+      setCodeError('');
+    } else {
+      setNameError(newNameError);
+      setCodeError(newCodeError);
     }
-
-    if (code.trim() === '') {
-      setCodeError('Code is required');
-      return;
-    }
-
-    // if (existingCodes.includes(code.trim())) {
-    //   setCodeExistsError('Code already exists');
-    //   return;
-    // }
-
-    // Perform the create action with the name and code
-    const response = await CreateCategory(name, code);
-    if (response) {
-      // The framework was successfully created
-      console.log('Category created:', response);
-    }
-
-    // You can perform any other action here with the form data
-
-    // Reset the fields
-    setName('');
-    setCode('');
   };
 
   const handleCancel = () => {
-    // Reset the fields without saving the data
+    // Reset fields without saving data
     setName('');
     setCode('');
+    setNameError('');
+    setCodeError('');
   };
 
   return (
@@ -92,8 +104,8 @@ function CategoryCreate({ existingCodes }) {
           value={code}
           onChange={handleCodeChange}
           fullWidth
-          error={codeError !== '' || codeExistsError !== ''}
-          helperText={codeError || codeExistsError}
+          error={codeError !== ''}
+          helperText={codeError}
           style={{ marginBottom: '1rem' }}
         />
         <Button onClick={handleCreate} variant="contained" backgroundColor=" #3b5998" style={{ marginRight: '1rem' }}>
