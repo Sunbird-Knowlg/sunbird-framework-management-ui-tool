@@ -7,6 +7,7 @@ import FrameworkList from '../Components/FrameworkList';
 import TermList from '../Components/TermList';
 import TermCreate from '../Components/TermCreate';
  import DetailsPage from '../Components/DetailsPage';
+ import EditDetailsPage from '../Components/EditDetailsPage';
 // import CustomTable from '../Components/CustomTable';
 
 const Routers = () => {
@@ -19,6 +20,8 @@ const Routers = () => {
       <Route path='/term/create' element={<TermCreate />} />
       <Route path='/term/list' element={<TermList />} />
       <Route path='/details/:id' element={<DetailsPage />} />
+      <Route path='/editdetails/:id' element={<EditDetailsPage />} /> 
+
       {/* <Route path='/details/:id' element={<DetailsPage />} /> */}
       
 

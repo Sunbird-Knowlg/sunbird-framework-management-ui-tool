@@ -18,11 +18,18 @@ function CustomTable({ data, dataType, onEdit, onDelete }) {
       width: 150,
       flex: 1,
       align: 'left',
-      renderCell: (params) => (
+      
+      renderCell: (params) => {console.log(params);
+        return (<Link to={{
+          pathname: `/editdetails/${params.row.id}`,
+          state: { rowData: params.row } // Pass the row data as state to the DetailsPage
+        }} style={{ textDecoration: 'none' }}>
         <IconButton onClick={() => onEdit(params.id)} style={{ color: 'black', fontSize: '14px' }}>
           <EditIcon fontSize="small" />
         </IconButton>
-      ),
+        </Link>);
+        }
+        ,
     },
     {
       field: 'delete',

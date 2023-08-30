@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = 'https://dev.knowlg.sunbird.org/api';
 
-const apiKey = "API key";
+const apiKey = " API key";
 // Replace <API Key> with your actual API key
 
 export const fetchFrameworkList = () => {
@@ -166,5 +166,84 @@ export const fetchFrameworkDetailsById = (identifier) => {
   });
   };
 
+  // export const updateFrameworkDescription = (identifier, description) => {
+  //   const headers = {
+  //     Authorization: apiKey,
+  //     'Content-Type': 'application/json',
+  //   };
+  
+  //   const requestData = {
+  //     framework: {
+  //       description: description,
+  //     },
+  //   };
+  
+  //   return axios.put(`${BASE_URL}/framework/v1/update/{ID}`, requestData, { headers })
+  //     .then(response => response.data.result.framework)
+  //     .catch(error => {
+  //       console.log('Failed to update framework details:', error);
+  //       return {};
+  //     });
+  // };
+
+
+  // export const updateFramework = (identifier, updatedData) => {
+  //   const headers = {
+  //     Authorization: apiKey,
+  //     'Content-Type': 'application/json',
+  //   };
+  
+  //   const requestData = {
+  //     framework: {
+  //       // Include all the fields you want to update
+  //       name: updatedData.name,
+  //       description: updatedData.description,
+  //       channel: updatedData.channel,
+  //       owner: updatedData.owner,
+  //       type: updatedData.type,
+  //       // Add more fields here
+  //     },
+  //   };
+    
+  //   return axios.PATCH(`${BASE_URL}/framework/v1/category/update${identifier}`, requestData, { headers })
+  //     .then(response => response.data.result.framework)
+  //     .catch(error => {
+  //       console.log('Failed to update framework details:', error);
+  //       return {};
+  //     });
+  // };
+
+
+
+  export const updateFramework = (identifier, updatedData) => {
+    const headers = {
+      Authorization: apiKey,
+      'Content-Type': 'application/json',
+    };
+  
+    const requestData = {
+      framework: {
+        // Include all the fields you want to update
+        name: updatedData.name,
+        description: updatedData.description,
+        channel: updatedData.channel,
+        owner: updatedData.owner,
+        type: updatedData.type,
+        // Add more fields here
+      },
+    };
+    console.log(updatedData);
+  
+    return axios.patch(`${BASE_URL}/framework/v1/update/${identifier}`, {request: requestData}, { headers })
+      .then(response => { 
+        console.log('success',response);
+        return response.data.result})
+      .catch(error => {
+        console.log('Failed to update framework details:', error);
+        return {};
+      });
+  };
+  
+  
 // Other existing functions for fetching category, term, etc.
 // ...
