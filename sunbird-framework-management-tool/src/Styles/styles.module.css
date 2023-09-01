@@ -1,17 +1,52 @@
-/* styles.css */
+.formStyle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+}
 
-.container {
-    background-color: white;
-    padding: 1rem;
-  }
-  
-  .title {
-    color: #3b5998;
-  }
-  
-  .retry-button-container {
-    margin-top: 1rem;
-  }
+.formContainerStyle {
+  width: 50%;
+  padding: 5rem;
+  background-color: white;
+}
+
+.title {
+  color: #3b5998;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputField {
+  margin-bottom: 1rem;
+}
+
+.space {
+  height: 1rem; 
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.submitButton {
+  margin-right: 1rem;
+}
+
+.cancelButton {
+  margin-left: 0.5rem;
+}
+
+.retry-button-container {
+  margin-top: 1rem;
+}
+
 
   
-  
+ 

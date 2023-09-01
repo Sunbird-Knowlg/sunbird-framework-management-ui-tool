@@ -1,20 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { CreateFramework } from '../service/restservice'; // Import the CreateFramework function
-
-const formStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '90vh',
-};
-
-const formContainerStyle = {
-  width: '50%', // Set the width of the container to be half of the page
-  padding: '2rem',
-  backgroundColor: 'white',
-};
+import styles from '../Styles/styles.module.css';
 
 function FrameworkCreate({existingCodes}) {
   const [name, setName] = useState('');
@@ -87,33 +74,38 @@ function FrameworkCreate({existingCodes}) {
   };
 
   return (
-    <div style={formStyle}>
-      <div style={formContainerStyle}>
-        <h2 style={{ color: '#3b5998' }}>Create New Framework</h2>
-        <TextField
-          label="Name*"
-          value={name}
-          onChange={handleNameChange}
-          fullWidth
-          error={nameError !== ''}
-          helperText={nameError}
-          style={{ marginBottom: '1rem' }}
-        />
-        <TextField
-          label="Code*"
-          value={code}
-          onChange={handleCodeChange}
-          fullWidth
-          error={codeError !== ''}
-          helperText={codeError}
-          style={{ marginBottom: '1rem' }}
-        />
-        <Button onClick={handleCreate} variant="contained" backgroundColor=" #3b5998" style={{ marginRight: '1rem' }}>
-          Create
-        </Button>
-        <Button onClick={handleCancel} variant="contained" backgroundColor=" #3b5998">
-          Cancel
-        </Button>
+    <div className={styles.formStyle}>
+      <div className={styles.formContainerStyle}>
+        <h2 className={styles.title}>Create New Framework</h2>
+        <div className={styles.inputContainer}>
+          <TextField
+            label="Name*"
+            value={name}
+            onChange={handleNameChange}
+            fullWidth
+            error={nameError !== ''}
+            helperText={nameError}
+            className={styles.inputField}
+          />
+          <div className={styles.space} /> {/* Add space between Name and Code */}
+          <TextField
+            label="Code*"
+            value={code}
+            onChange={handleCodeChange}
+            fullWidth
+            error={codeError !== ''}
+            helperText={codeError}
+            className={styles.inputField}
+          />
+        </div>
+        <div className={styles.buttonContainer}>
+          <Button onClick={handleCreate} variant="contained" className={styles.submitButton}>
+            Create
+          </Button>
+          <Button onClick={handleCancel} variant="contained" className={styles.cancelButton}>
+            Cancel
+          </Button>
+        </div>
       </div>
     </div>
   );
