@@ -1,45 +1,79 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import TermTable from './TermTable';
+import CustomTable from './CustomTable';
 import { fetchTermList } from '../service/restservice';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import styles from '../Styles/styles.module.css'; // Update the path based on your project structure
 
-function TermList() {
+const ErrorBoundary = ({ children, onRetry }) => {
+  return (
+    <div>
+      {children}
+      {onRetry && ( // Render the Retry button only when onRetry is provided
+        <div className={styles.retryButtonContainer}>
+          <Button variant="contained" color="primary" onClick={onRetry}>
+            Retry
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const TermList = () => {
   const [terms, setTerms] = useState([]);
   const [editId, setEditId] = useState(null);
+  const [error, setError] = useState(false);
+
+  const fetchData = () => {
+    fetchTermList()
+      .then(data => {
+        setTerms(data.result.Term);
+        setError(false);
+      })
+      .catch(error => {
+        console.error('Error fetching term list:', error);
+        setError(true);
+      });
+  };
 
   useEffect(() => {
-    // Fetch the list of terms from the API
-     fetchTermList()
-     .then(data=> {
-      console.log(data)
+    fetchData();
+  }, []);
 
-      setTerms(data.result.Term)
-     })
-    }, []);
-  
-
-  const handleEdit = (id) => {
+  const handleEdit = id => {
     setEditId(id);
   };
 
-  const handleDelete = (id) => {
-    // You can implement the delete logic here, such as making a DELETE request to the API
-    // After successful deletion, you can update the state to remove the deleted term
-    // For simplicity, let's just filter it out from the state.
-    setTerms(prevTerms => prevTerms.filter(term => term.id !== id));
+  const handleDelete = id => {
+    setTerms(prevTerms =>
+      prevTerms.filter(term => term.id !== id)
+    );
   };
 
+  
+
   return (
-    <div>
-      <h2>Term List</h2>
-      <TermTable
-        terms={terms}
-        editId={editId}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-    </div>
+    <div className={styles.container}>
+    <h2 className={styles.title}>term List</h2>
+    <ErrorBoundary onRetry={error ? fetchData : null}>
+      {error ? (
+        <Alert severity="error">
+          Something went wrong. Please try again later.
+        </Alert>
+      ) : (
+        <CustomTable
+          data={terms}
+          editId={editId}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      )}
+    </ErrorBoundary>
+  </div>
   );
-}
+};
 
 export default TermList;
+
+

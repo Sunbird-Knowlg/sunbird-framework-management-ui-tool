@@ -1,72 +1,68 @@
 import React from 'react';
 import { Drawer, Accordion, AccordionSummary, AccordionDetails, Typography, Button } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Link } from 'react-router-dom';
-import { blue } from '@mui/material/colors';
+import styles from '../Styles/styles.module.css';
 
-// Common button style for all framework, category, and term buttons
-const buttonStyle = {
-  marginBottom: '1rem',
-  width: '100%',
-  anchor: "left",
-  backgroundColor:'#e1f5fe',
-  color:'black'
+const drawerWidth = 250;
+
+const menuSections = [
+  {
+    title: 'Create',
+    links: [
+      { text: 'Framework', to: '/framework/create' },
+      { text: 'Category', to: '/category/create' },
+      { text: 'Terms', to: '/term/create' },
+    ],
+  },
+  {
+    title: 'List',
+    links: [
+      { text: 'Framework', to: '/framework/list' },
+      { text: 'Category', to: '/category/list' },
+      { text: 'Terms', to: '/term/list' },
+    ],
+  },
+];
+const headingStyle = {
+  fontFamily: 'gothvetica',
+  fontSize: '26px',
+  color: 'white',
 };
-
-function SideMenu({ handleCreateClick, handleListClick, handleFormOpen }) {
+function SideMenu({ handleCreateClick, handleListClick }) {
   return (
-    // <Drawer anchor="left" open={true} variant="permanent" className="side-menu-drawer">
-    <Drawer anchor="left" open={true} variant="permanent" className="side-menu-drawer" sx={{ backgroundColor: '#e1f5fe' }}>
-      <div style={{ marginBottom: '1rem' }}>
-        <Accordion expanded={true} onChange={handleCreateClick}>
-          <AccordionSummary>
-            {/* expandIcon={<ExpandMoreIcon />} */}
-          
-            <Typography style={{ color: <strong>black</strong>}}>Create</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Link to="/framework/create">
-              <Button style={buttonStyle}>
-              Framework
-              </Button>
-            </Link>
-            <Link to="/category/create">
-              <Button style={buttonStyle}>
-                Category
-              </Button>
-            </Link>
-            <Link to="/term/create">
-              <Button style={buttonStyle}>
-                Terms
-              </Button>
-            </Link>
-          </AccordionDetails>
-        </Accordion>
-      </div>
-      <div style={{ marginBottom: '1rem' }}>
-        <Accordion expanded={true} onChange={handleListClick}>
-          <AccordionSummary>
-          {/* expandIcon={<ExpandMoreIcon />}> */}
-           
-            <Typography style={{ color: <strong>black</strong>}}>List</Typography> 
-          </AccordionSummary>
-          <AccordionDetails>
-            <Button style={buttonStyle}>
-              <Link to="/framework/list" style={{ color: 'black' }}>Framework</Link>
-            </Button>
-            <Button style={buttonStyle}>
-              
-              <Link to="/category/list" style={{ color: 'black' }}>Category</Link>
-            </Button>
-            <Button style={buttonStyle}>
-            <Link to="/term/list" style={{ color: 'black' }}>Terms</Link>
-            </Button>
-          </AccordionDetails>
-        </Accordion>
-      </div>
+    <Drawer
+      anchor="left"
+      open={true}
+      variant="permanent"
+      PaperProps={{ style: { width: drawerWidth, backgroundColor: '#D8CFD0', border: '1px inset black' } }}
+    >
+      {menuSections.map((section, index) => (
+        <div key={index}>
+          <Accordion expanded={true} onChange={section.title === 'List' ? handleListClick : handleCreateClick}>
+            <AccordionSummary className={styles.accordionSummaryStyle}>
+              <Typography className={styles.createTitle} style={headingStyle}>
+                <strong>{section.title}</strong>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails className={styles.accordionDetailsStyle}>
+              {section.links.map((link, linkIndex) => (
+                <Button className={styles.buttonStyle}>
+                  <Link to={link.to} className={styles.linkStyle}>
+                    {link.text}
+                  </Link>
+                </Button>
+              ))}
+            </AccordionDetails>
+          </Accordion>
+        </div>
+      ))}
+      <div className={styles.additionalStyle}></div>
     </Drawer>
   );
 }
 
 export default SideMenu;
+
+
+
 

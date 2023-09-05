@@ -1,44 +1,78 @@
 import React, { useState, useEffect } from 'react';
-import FrameworkTable from './FrameworkTable';
-import { fetchFrameworkList } from '../service/restservice'; // Import the fetchFrameworkList function
+import CustomTable from './CustomTable';
+import { fetchFrameworkList } from '../service/restservice';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import styles from '../Styles/styles.module.css'; // Update the path based on your project structure
 
-function FrameworkList() {
+const ErrorBoundary = ({ children, onRetry }) => {
+  return (
+    <div>
+      {children}
+      {onRetry && ( // Render the Retry button only when onRetry is provided
+        <div className={styles.retryButtonContainer}>
+          <Button variant="contained" color="primary" onClick={onRetry}>
+            Retry
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+
+const FrameworkList = () => {
   const [frameworks, setFrameworks] = useState([]);
   const [editId, setEditId] = useState(null);
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    // Fetch the list of frameworks from the API using the fetchFrameworkList function
+  const fetchData = () => {
     fetchFrameworkList()
       .then(data => {
-        console.log(data)
-
         setFrameworks(data.result.frameworks);
+        setError(false); // Reset the error state on successful fetch
+      })
+      .catch(error => {
+        console.error('Error fetching framework list:', error);
+        setError(true);
       });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
-  const handleEdit = (id) => {
+  const handleEdit = id => {
     setEditId(id);
   };
 
-  const handleDelete = (id) => {
-    // You can implement the delete logic here, such as making a DELETE request to the API
-    // After successful deletion, you can update the state to remove the deleted framework
-    // For simplicity, let's just filter it out from the state.
-    setFrameworks(prevFrameworks => prevFrameworks.filter(framework => framework.id !== id));
+  const handleDelete = id => {
+    setFrameworks(prevFrameworks =>
+      prevFrameworks.filter(frameworks => frameworks.id !== id)
+    );
   };
 
   return (
-    <div>
-      <h2>Framework List</h2>
-      <FrameworkTable
-        frameworks={frameworks}
-        editId={editId}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+    <div className={styles.container}>
+      <h2 className={styles.title}>Framework List</h2>
+      <ErrorBoundary onRetry={error ? fetchData : null}>
+        {error ? (
+          <Alert severity="error">
+            Something went wrong. Please try again later.
+          </Alert>
+        ) : (
+          <CustomTable
+            data={frameworks}
+            editId={editId}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        )}
+      </ErrorBoundary>
     </div>
   );
-}
+};
 
 export default FrameworkList;
+
 

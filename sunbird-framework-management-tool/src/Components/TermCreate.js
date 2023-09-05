@@ -1,57 +1,114 @@
 import React, { useState } from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
-import axios from 'axios';
+import { TextField, Button } from '@mui/material';
+import { CreateTerm } from '../service/restservice';
+import styles from '../Styles/styles.module.css';
 
-function TermCreate({ open, onClose, onCreate, title, placeholder }) {
+function TermsCreate({ existingCodes }) {
   const [name, setName] = useState('');
-  const [nameError, setNameError] = useState('');
+   const [code, setCode] = useState('');
+   const [nameError, setNameError] = useState('');
+   const [codeError, setCodeError] = useState('');
+
+   const validateName = (newName) => {
+    if (newName.trim() === '') {
+      return 'Name is required';
+    } else if (newName.includes(' ')) {
+      return 'Spaces are not allowed';
+    }
+    return '';
+  };
+
+  const validateCode = (newCode) => {
+    if (newCode.trim() === '') {
+      return 'Code is required';
+    }
+    if (existingCodes && existingCodes.includes(newCode.trim())) {
+      return 'Code already exists';
+    }
+    return '';
+  };
 
   const handleNameChange = (e) => {
     const newName = e.target.value;
     setName(newName);
-    setNameError(newName.trim() === '' ? 'Name is required' : '');
+    setNameError(validateName(newName));
   };
 
-  const handleCreate = () => {
-    if (name.trim() === '') {
-      setNameError('Name is required');
-      return;
-    }
+  const handleCodeChange = (e) => {
+    const newCode = e.target.value;
+    setCode(newCode);
+    setCodeError(newCode.trim() === '' ? 'Code is required' : '');
+    setCodeError(validateCode(newCode));
+  };
 
-    axios.post('https://api.example.com/terms', {
-      name,
-    })
-    .then(response => {
-      console.log('Term created successfully:', response.data);
-      onCreate(name);
-      onClose();
-    })
-    .catch(error => {
-      console.log('Failed to create term:', error);
-    });
+  const handleCreate = async() => {
+    const newNameError = validateName(name);
+    const newCodeError = validateCode(code);
+
+    if (!newNameError && !newCodeError) {
+      const response = await CreateTerm(name, code);
+      if (response) {
+        // Handle success response
+      } else {
+        // Handle error response
+      }
+
+      // Reset fields
+      setName('');
+      setCode('');
+      setNameError('');
+      setCodeError('');
+    } else {
+      setNameError(newNameError);
+      setCodeError(newCodeError);
+    }
+  };
+    
+
+  const handleCancel = () => {
+    // Reset the fields without saving the data
+    setName('');
+    setCode('');
+    setNameError('');
+    setCodeError('');
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <TextField
-          label="Name*"
-          value={name}
-          onChange={handleNameChange}
-          fullWidth
-          placeholder={placeholder}
-          error={nameError !== ''}
-          helperText={nameError}
-          style={{ marginBottom: '1rem' }}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleCreate} disabled={nameError !== ''}>Create</Button>
-      </DialogActions>
-    </Dialog>
+    <div className={styles.formStyle}>
+      <div className={styles.formContainerStyle}>
+        <h2 className={styles.title}>Create New Term</h2>
+        <div className={styles.inputContainer}>
+          <TextField
+            label="Name*"
+            value={name}
+            onChange={handleNameChange}
+            fullWidth
+            error={nameError !== ''}
+            helperText={nameError}
+            className={styles.inputField}
+          />
+          <div className={styles.space} /> {/* Add space between Name and Code */}
+          <TextField
+            label="Code*"
+            value={code}
+            onChange={handleCodeChange}
+            fullWidth
+            error={codeError !== ''}
+            helperText={codeError}
+            className={styles.inputField}
+          />
+        </div>
+        <div className={styles.buttonContainer}>
+          <Button onClick={handleCreate} variant="contained" className={styles.submitButton}>
+            Create
+          </Button>
+          <Button onClick={handleCancel} variant="contained" className={styles.cancelButton}>
+            Cancel
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
 
-export default TermCreate;
+export default TermsCreate;
