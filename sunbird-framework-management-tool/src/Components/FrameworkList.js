@@ -48,7 +48,7 @@ const FrameworkList = () => {
 
   const handleDelete = id => {
     setFrameworks(prevFrameworks =>
-      prevFrameworks.filter(frameworks => frameworks.id !== id)
+      [...prevFrameworks.filter(frameworks => frameworks.code !== id)]
     );
   };
 
@@ -66,6 +66,7 @@ const FrameworkList = () => {
             editId={editId}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            type="framework"
           />
         )}
       </ErrorBoundary>

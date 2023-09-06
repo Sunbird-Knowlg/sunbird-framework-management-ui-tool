@@ -47,7 +47,7 @@ const TermList = () => {
 
   const handleDelete = id => {
     setTerms(prevTerms =>
-      prevTerms.filter(term => term.id !== id)
+      [...prevTerms.filter(term => term.identifier !== id)]
     );
   };
 
@@ -67,6 +67,7 @@ const TermList = () => {
           editId={editId}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          type="term"
         />
       )}
     </ErrorBoundary>

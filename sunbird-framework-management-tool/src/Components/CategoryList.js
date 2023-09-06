@@ -47,7 +47,7 @@ const CategoryList = () => {
 
   const handleDelete = id => {
     setCategories(prevCategories =>
-      prevCategories.filter(category => category.id !== id)
+      [...prevCategories.filter(category => category.code !== id)]
     );
   };
 
@@ -65,6 +65,7 @@ const CategoryList = () => {
             editId={editId}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            type="category"
           />
         )}
       </ErrorBoundary>

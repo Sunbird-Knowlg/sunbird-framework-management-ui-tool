@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
-function CustomTable({ data, dataType, onEdit, onDelete }) {
+function CustomTable({ data, dataType, onEdit, onDelete,type }) {
   const columns = [
     { field: 'name', headerName: <strong style={{ color: 'black' }}>Name</strong>, width: 150, flex: 1, align: 'left', editable: true },
     { field: 'channel', headerName: <strong style={{ color: 'black' }}>Channel</strong>, width: 150, flex: 1, align: 'left' },
@@ -21,7 +21,7 @@ function CustomTable({ data, dataType, onEdit, onDelete }) {
       
       renderCell: (params) => {console.log(params);
         return (<Link to={{
-          pathname: `/editdetails/${params.row.id}`,
+          pathname: `/${type}/editdetails/${params.row.id}`,
           state: { rowData: params.row } // Pass the row data as state to the DetailsPage
         }} style={{ textDecoration: 'none' }}>
         <IconButton onClick={() => onEdit(params.id)} style={{ color: 'black', fontSize: '14px' }}>
@@ -54,7 +54,7 @@ function CustomTable({ data, dataType, onEdit, onDelete }) {
       renderCell: (params) => {
         console.log(params);
         return (<Link to={{
-          pathname: `/details/${params.row.id}`,
+          pathname: `/${type}/details/${params.row.id}`,
           state: { rowData: params.row } // Pass the row data as state to the DetailsPage
         }} style={{ textDecoration: 'none' }}>
           <IconButton style={{ color: 'black', padding: '6px', fontSize: '14px' }}>
@@ -136,10 +136,10 @@ function CustomTable({ data, dataType, onEdit, onDelete }) {
           Are you sure you want to delete this selected row?
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCancel} color="primary">
+          <Button onClick={handleDeleteConfirm} color="primary">
             Yes
           </Button>
-          <Button onClick={handleDeleteConfirm} color="primary">
+          <Button onClick={handleDeleteCancel} color="primary">
             No
           </Button>
         </DialogActions>
