@@ -3,12 +3,12 @@ import { TextField, Button } from '@mui/material';
 import { CreateFramework } from '../service/restservice'; // Import the CreateFramework function
 import styles from '../Styles/styles.module.css';
 
-function FrameworkCreate({existingCodes}) {
+function FrameworkCreate({ existingCodes }) {
   const [name, setName] = useState('');
   const [code, setCode] = useState('');
   const [nameError, setNameError] = useState('');
   const [codeError, setCodeError] = useState('');
-  
+
   const validateName = (newName) => {
     if (newName.trim() === '') {
       return 'Name is required';
@@ -29,7 +29,6 @@ function FrameworkCreate({existingCodes}) {
     return '';
   };
 
-
   const handleNameChange = (e) => {
     const newName = e.target.value;
     setName(newName);
@@ -47,10 +46,14 @@ function FrameworkCreate({existingCodes}) {
     const newCodeError = validateCode(code);
 
     if (!newNameError && !newCodeError) {
-      const response = await CreateFramework(name, code);
-      if (response) {
+      try {
+        const response = await CreateFramework(name, code);
+        // console.log('Create Framework Request:', response.config); // Log the request
+        // console.log('Create Framework Response:', response.data); // Log the response
+
         // Handle success response
-      } else {
+      } catch (error) {
+        console.error('Create Framework Error:', error); // Log any errors
         // Handle error response
       }
 
